@@ -1,24 +1,26 @@
 <template>
-    <nav class="navbar navbar-background navbar-dark navbar-expand-xl">
+    <header class="header">
+        <nav class="navbar navbar-background navbar-dark navbar-expand-xl">
 
-        <div class="container">
-            <a href="#" class="navbar-brand">
-                <h1>
-                    <img class="header-logo" src="@/assets/logo.png" alt="Logo da Uninorte">
-                </h1>
-            </a>
+            <div class="container">
+                <a href="#" class="navbar-brand">
+                    <h1>
+                        <img class="header-logo" src="@/assets/logo.png" alt="Logo da Uninorte">
+                    </h1>
+                </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Abrir Menu">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Abrir Menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-            <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
-                <HeaderLogged v-if="userIsLogged" :user="this.store.state.user" />
-                <HeaderNotLogged v-else />
+                <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
+                    <HeaderLogged v-if="userIsLogged" :user="this.store.state.user" />
+                    <HeaderNotLogged v-else />
+                </div>
             </div>
-        </div>
 
-    </nav>
+        </nav>
+    </header>
 </template>
 
 <script>
@@ -49,6 +51,10 @@ export default {
 </script>
 
 <style scoped>
+.header {
+    height: 10vh;
+}
+
 .navbar-background {
     background-color: #0B2F77;
 }
