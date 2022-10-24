@@ -1,24 +1,31 @@
-# face-recognition
+# Front-end of Face Recognition System
 
-## Project setup
+## Tech Stack
+
+- [Vue.js 3](https://vuejs.org/)
+
+## How to run this project?
+
+### Clone this repository
+```
+git clone https://github.com/projeto-un-rest/face-recognition.git
+```
+
+### Access project folder
+```
+cd face-recognition
+```
+
+### Install dependencies
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### Run project
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## Git branch naming pattern
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- [Branch Pattern](https://medium.com/prolog-app/nossos-padr%C3%B5es-de-nomenclatura-para-branches-e-commits-fade8fd17106)
