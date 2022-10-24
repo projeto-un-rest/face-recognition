@@ -9,12 +9,12 @@
             <div class="col-md-6 form-column">
                 <h2 class="mb-4">Bem-vindo de volta</h2>
 
-                <form class="form">
+                <form class="form" @submit.prevent="signIn" novalidate>
                     <label for="email">E-mail</label>
-                    <input class="form-control" id="email" type="email">
+                    <input class="form-control" id="email" type="email" v-model="user.email">
 
                     <label for="password">Senha</label>
-                    <input class="form-control" id="password" type="password">
+                    <input class="form-control" id="password" type="password" v-model="user.password">
 
                     <div class="d-grid mt-3">
                         <button class="btn btn-primary">Entrar</button>
@@ -27,8 +27,32 @@
 </template>
 
 <script>
+import { useStore } from "vuex"
+
 export default {
-    name: "Login"
+    name: "Login",
+    data() {
+        return {
+            user: {
+                email: "",
+                password: ""
+            }
+        }
+    },
+
+    methods: {
+        signIn() {
+            this.store.dispatch("signIn", this.user)
+                .then(() => this.$router.push({ path: "/" }))
+                .catch(error => console.log(error))
+        }
+    },
+    setup() {
+        const store = useStore()
+        return {
+            store
+        }
+    }
 }
 </script>
 
