@@ -1,10 +1,19 @@
 <template>
-  <h1>Face Recognition System</h1>
+  <Header />
+  <router-view></router-view>
+  <Footer />
 </template>
 
 <script>
+import Header from '@/components/Header.vue'
+import Footer from '@/components/Footer.vue'
+
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    Header,
+    Footer
+  }
 }
 </script>
 
