@@ -69,14 +69,14 @@ export default {
     },
 
     methods: {
-        openModal() {
-            this.showModal = true;
-
+        openModal() {          
             navigator.mediaDevices.getUserMedia({video: true})
                 .then(mediaStream => {
                     const video = this.$refs.video;
                     video.srcObject = mediaStream;
                     video.play();
+
+                    this.showModal = true;
                 })
                 .catch(() => {
                     console.log("Erro ao acessar a câmera")
