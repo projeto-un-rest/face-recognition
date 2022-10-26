@@ -55,6 +55,9 @@
 <script>
 import Dialog from "@/components/Dialog.vue";
 import http from "@/http";
+import useValidate from "@vuelidate/core";
+import { required, email } from "@vuelidate/validators";
+import { useToast } from "vue-toastification";
 
 export default {
     name: "Register",
@@ -64,7 +67,13 @@ export default {
     data() {
         return {
             showModal: false,
-            photoAlreadyTaken: false
+            photoAlreadyTaken: false,
+
+            user: {
+                name: "",
+                email: "",
+                password: ""
+            }
         }
     },
 
@@ -78,9 +87,7 @@ export default {
 
                     this.showModal = true;
                 })
-                .catch(() => {
-                    console.log("Erro ao acessar a câmera")
-                })
+                .catch(() => this.toast.error("Não foi possível acessar a câmera"))
         },
 
         closeModal() {
@@ -100,21 +107,35 @@ export default {
             this.photoAlreadyTaken = true;
         },
 
-        sendForm() {
-            const canvas = this.$refs.canvas;
+        async sendForm() {
+            this.v$.$validate();
 
-            canvas.toBlob(function(blob) {
+            if(!this.v$.$error) {
+                try {
+                    const response = await http.post("/api/user/register", this.user)
 
-                const formData = new FormData();
-                formData.append("photo", blob, "photo.jpg");
+                    const userId = response.data.userId;
+                    const canvas = this.$refs.canvas;
 
-                http.put(`/api/user/photo/1`, formData, {
-                    headers: {
-                        "Content-Type": "multipart/form-data"
-                    }
-                });
+                    canvas.toBlob(blob => {
 
-            }, "image/jpeg");
+                        const formData = new FormData();
+                        formData.append("photo", blob, "photo.jpg");
+
+                        http.put(`/api/user/photo/${ userId }`, formData, {
+                            headers: {
+                                "Content-Type": "multipart/form-data"
+                            }
+                        });
+
+                    }, "image/jpeg");
+
+                } catch { this.toast.error("Ocorreu um erro, tente novamente mais tarde") }
+
+            } else {
+                this.closeModal();
+                this.toast.error("Preencha todos os campos");
+            }
         },
 
         clearCanvas() {
@@ -123,6 +144,26 @@ export default {
 
             context.clearRect(0, 0, canvas.width, canvas.height);
             this.photoAlreadyTaken = false;
+        }
+    },
+
+    validations() {
+        return {
+            user: {
+                name: { required },
+                email: { required, email },
+                password: { required }
+            }
+        }
+    },
+
+    setup() {
+        const toast = useToast();
+        const v$ = useValidate();
+
+        return {
+            toast,
+            v$
         }
     }
 }
