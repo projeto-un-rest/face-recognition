@@ -11,13 +11,13 @@
 
                 <form class="form" novalidate>
                     <label for="name">Primeiro Nome</label>
-                    <input class="form-control" id="name" type="text">
+                    <input class="form-control" id="name" type="text" v-model="user.name">
                 
                     <label for="email">E-mail</label>
-                    <input class="form-control" id="email" type="email">
+                    <input class="form-control" id="email" type="email" v-model="user.email">
                 
                     <label for="password">Senha</label>
-                    <input class="form-control" id="password" type="password">
+                    <input class="form-control" id="password" type="password" v-model="user.password">
                 
                     <div class="d-grid my-3">
                         <button @click.prevent="openModal" class="button-dialog">Tirar foto</button>
