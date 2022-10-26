@@ -122,13 +122,16 @@ export default {
                         const formData = new FormData();
                         formData.append("photo", blob, "photo.jpg");
 
-                        http.put(`/api/user/photo/${ userId }`, formData, {
+                        await http.put(`/api/user/photo/${ userId }`, formData, {
                             headers: {
                                 "Content-Type": "multipart/form-data"
                             }
                         });
 
                     }, "image/jpeg");
+
+                    this.closeModal();
+                    this.$router.push({ path: "/login" });
 
                 } catch { this.toast.error("Ocorreu um erro, tente novamente mais tarde") }
 
