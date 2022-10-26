@@ -23,22 +23,25 @@ export default {
     width: 50%;
     height: auto;
     position: absolute;
-    top: 50%;
     left: 50%;
     transform: translateX(-50%);
-    background-color: white;
+    background: linear-gradient(-35deg, white, #01153d);
     border-radius: 5px;
     display: none;
 }
 
 .modal.active {
     display: block;
-    animation: showModal .5s;
+    animation: showModal 1s;
 }
 
 @keyframes showModal {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 .modal.active + .backdrop {
@@ -48,5 +51,12 @@ export default {
     top: 0;
     bottom: 0;
     background-color: rgba(0, 0, 0, .5)
+}
+
+@media (max-width: 920px) {
+    .modal {
+        width: 80%;
+        top: 20%;
+    }
 }
 </style>
