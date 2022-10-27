@@ -11,13 +11,13 @@
 
                 <form class="form" novalidate>
                     <label for="name">Primeiro Nome</label>
-                    <input class="form-control" id="name" type="text">
+                    <input class="form-control" id="name" type="text" v-model="user.name">
                 
                     <label for="email">E-mail</label>
-                    <input class="form-control" id="email" type="email">
+                    <input class="form-control" id="email" type="email" v-model="user.email">
                 
                     <label for="password">Senha</label>
-                    <input class="form-control" id="password" type="password">
+                    <input class="form-control" id="password" type="password" v-model="user.password">
                 
                     <div class="d-grid my-3">
                         <button @click.prevent="openModal" class="button-dialog">Tirar foto</button>
@@ -55,6 +55,9 @@
 <script>
 import Dialog from "@/components/Dialog.vue";
 import http from "@/http";
+import useValidate from "@vuelidate/core";
+import { required, email } from "@vuelidate/validators";
+import { useToast } from "vue-toastification";
 
 export default {
     name: "Register",
@@ -64,23 +67,27 @@ export default {
     data() {
         return {
             showModal: false,
-            photoAlreadyTaken: false
+            photoAlreadyTaken: false,
+
+            user: {
+                name: "",
+                email: "",
+                password: ""
+            }
         }
     },
 
     methods: {
-        openModal() {
-            this.showModal = true;
-
+        openModal() {          
             navigator.mediaDevices.getUserMedia({video: true})
                 .then(mediaStream => {
                     const video = this.$refs.video;
                     video.srcObject = mediaStream;
                     video.play();
+
+                    this.showModal = true;
                 })
-                .catch(() => {
-                    console.log("Erro ao acessar a câmera")
-                })
+                .catch(() => this.toast.error("Não foi possível acessar a câmera"))
         },
 
         closeModal() {
@@ -100,21 +107,38 @@ export default {
             this.photoAlreadyTaken = true;
         },
 
-        sendForm() {
-            const canvas = this.$refs.canvas;
+        async sendForm() {
+            this.v$.$validate();
 
-            canvas.toBlob(function(blob) {
+            if(!this.v$.$error) {
+                try {
+                    const response = await http.post("/api/user/register", this.user)
 
-                const formData = new FormData();
-                formData.append("photo", blob, "photo.jpg");
+                    const userId = response.data.userId;
+                    const canvas = this.$refs.canvas;
 
-                http.put(`/api/user/photo/1`, formData, {
-                    headers: {
-                        "Content-Type": "multipart/form-data"
-                    }
-                });
+                    canvas.toBlob(async (blob) => {
 
-            }, "image/jpeg");
+                        const formData = new FormData();
+                        formData.append("photo", blob, "photo.jpg");
+
+                        await http.put(`/api/user/photo/${ userId }`, formData, {
+                            headers: {
+                                "Content-Type": "multipart/form-data"
+                            }
+                        });
+
+                    }, "image/jpeg");
+
+                    this.closeModal();
+                    this.$router.push({ path: "/login" });
+
+                } catch { this.toast.error("Ocorreu um erro, tente novamente mais tarde") }
+
+            } else {
+                this.closeModal();
+                this.toast.error("Preencha todos os campos");
+            }
         },
 
         clearCanvas() {
@@ -123,6 +147,26 @@ export default {
 
             context.clearRect(0, 0, canvas.width, canvas.height);
             this.photoAlreadyTaken = false;
+        }
+    },
+
+    validations() {
+        return {
+            user: {
+                name: { required },
+                email: { required, email },
+                password: { required }
+            }
+        }
+    },
+
+    setup() {
+        const toast = useToast();
+        const v$ = useValidate();
+
+        return {
+            toast,
+            v$
         }
     }
 }
