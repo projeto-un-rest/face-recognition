@@ -117,7 +117,7 @@ export default {
                     const userId = response.data.userId;
                     const canvas = this.$refs.canvas;
 
-                    canvas.toBlob(blob => {
+                    canvas.toBlob(async (blob) => {
 
                         const formData = new FormData();
                         formData.append("photo", blob, "photo.jpg");
