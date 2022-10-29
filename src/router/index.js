@@ -5,6 +5,7 @@ import Home from "@/views/Home.vue"
 import Login from "@/views/Login.vue"
 import Register from "@/views/Register.vue"
 import Classroom from "@/views/Classroom.vue"
+import Attendance from "@/views/Attendance.vue"
 
 const routes = [
     {
@@ -35,6 +36,12 @@ const routes = [
         path: "/classroom/:code",
         name: "Classroom",
         component: Classroom
+    },
+
+    {
+        path: "/attendance/:classroomCode",
+        name: "Attendance",
+        component: Attendance
     }
 ]
 
