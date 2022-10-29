@@ -37,6 +37,7 @@ import http from "@/http";
 import Dialog from "@/components/Dialog.vue";
 import { Attendance } from "@/model/Attendance";
 import { useToast } from "vue-toastification";
+import { useStore } from 'vuex';
 
 export default {
     name: "Attendance",
@@ -99,8 +100,26 @@ export default {
             this.photoAlreadyTaken = true;
         },
 
-        async sendForm() {
-            console.log("Verificando usuário...");
+        sendForm() {
+            try {
+                const canvas = this.$refs.canvas;
+
+                canvas.toBlob(async (blob) => {
+
+                    const formData = new FormData();
+                    formData.append("photo", blob, "photo.jpg");
+
+                    const response = await http.put(`/api/user/authenticate/face/${ this.store.state.user.id }`, formData, {
+                        headers: {
+                            "Content-Type": "multipart/form-data"
+                        }
+                    });
+
+                    console.log(response.data);
+
+                }, "image/jpeg");
+
+            } catch { this.toast.error("Ocorreu um erro, tente novamente mais tarde") }
         },
 
         clearCanvas() {
@@ -114,23 +133,38 @@ export default {
 
     setup() {
         const toast = useToast();
+        const store = useStore();
+
         return {
-            toast
+            toast,
+            store
         }
     }
 }
 </script>
 
 <style scoped>
-.box-icon {
-    cursor: pointer;
-}
-
-.box-icon i {
-    font-size: 20px;
-}
-
 .is-next {
     background-color: #DFFFE2;
+}
+
+.video, .canvas  {
+    width: 90%;
+}
+
+.btn-photo:hover {
+    background-color: #c04308;
+    color: white;
+}
+
+.btn-other-photo {
+    background-color: grey;
+    color: white;
+    margin: 16px 0px 0px 16px;
+}
+
+.btn-other-photo:hover {
+    background-color: grey;
+    color: white;
 }
 </style>
