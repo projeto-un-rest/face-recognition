@@ -26,14 +26,7 @@
             </div>
         </div>
 
-        <Dialog :showModal="showModal">
-            <div class="d-flex justify-content-between p-4">
-                <h3 class="popup-title">Cadastrar uma foto de perfil</h3>
-                <div class="box-icon" @click="closeModal">
-                    <i class="fa-sharp fa-solid fa-xmark"></i>
-                </div>
-            </div>
-
+        <Dialog title="Cadastrar uma foto de perfil" :showModal="showModal" @whenCloseModal="closeModal">
             <div class="d-flex justify-content-center">
                 <video class="video" ref="video"></video>
                 <canvas class="canvas position-absolute" ref="canvas"></canvas>
@@ -206,21 +199,6 @@ export default {
     background-color: #0B2F77;
     color: white;
     border: none;
-}
-
-.popup-title {
-    font-family: "Teko", sans-serif;
-    font-size: 32px;
-    color: white;
-}
-
-.box-icon {
-    cursor: pointer;
-}
-
-.box-icon i {
-    font-size: 24px;
-    color: white;
 }
 
 .video, .canvas  {

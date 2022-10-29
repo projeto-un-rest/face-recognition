@@ -1,5 +1,12 @@
 <template>
     <div class="modal" :class="{ 'active': showModal }">
+        <div class="d-flex justify-content-between p-4">
+            <h3 class="popup-title">{{ title }}</h3>
+            <div class="box-icon" @click="closeModal">
+                <i class="fa-sharp fa-solid fa-xmark"></i>
+            </div>
+        </div>
+
         <slot></slot>
     </div>
 
@@ -9,10 +16,22 @@
 <script>
 export default {
     name: "Dialog",
+    emits: ["whenCloseModal"],
     props: {
+        title: {
+            type: String,
+            required: false
+        },
+
         showModal: {
             type: Boolean,
             required: true
+        }
+    },
+
+    methods: {
+        closeModal() {
+            this.$emit("whenCloseModal");
         }
     }
 }
@@ -33,6 +52,22 @@ export default {
 .modal.active {
     display: block;
     animation: showModal 1s;
+}
+
+.popup-title {
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    font-size: 32px;
+    color: white;
+}
+
+.box-icon {
+    cursor: pointer;
+}
+
+.box-icon i {
+    font-size: 24px;
+    color: white;
 }
 
 @keyframes showModal {

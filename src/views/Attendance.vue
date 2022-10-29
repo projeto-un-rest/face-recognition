@@ -14,14 +14,7 @@
 
         </div>
 
-        <Dialog :showModal="showModal">
-            <div class="d-flex justify-content-between p-4">
-                <h3 class="popup-title">Validar Aluno</h3>
-                <div class="box-icon" @click="closeModal">
-                    <i class="fa-sharp fa-solid fa-xmark"></i>
-                </div>
-            </div>
-
+        <Dialog title="Validar Usuário" :showModal="showModal" @whenCloseModal="closeModal">
             <div class="d-flex justify-content-center">
                 <video class="video" ref="video"></video>
                 <canvas class="canvas position-absolute" ref="canvas"></canvas>
@@ -29,7 +22,7 @@
 
             <div class="d-flex justify-content-center mb-4">
                 <div v-if="photoAlreadyTaken">
-                    <button @click="sendForm" class="btn btn-photo">Se cadastrar</button>
+                    <button @click="sendForm" class="btn btn-photo">Verificar Usuário</button>
                     <button @click="clearCanvas" class="btn btn-other-photo">Tirar outra foto</button>
                 </div>
 
@@ -104,6 +97,10 @@ export default {
 
             context.drawImage(video, 0, 0)
             this.photoAlreadyTaken = true;
+        },
+
+        async sendForm() {
+            console.log("Verificando usuário...");
         },
 
         clearCanvas() {
