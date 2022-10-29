@@ -1,6 +1,11 @@
 import { createStore } from "vuex";
 import { SET_USER, LOGOUT_USER } from "./mutations";
+import VuexPersistence from "vuex-persist";
 import http from "@/http";
+
+const vuexLocal = new VuexPersistence({
+    storage: window.localStorage
+});
 
 export const store = createStore({
     state: {
@@ -53,5 +58,7 @@ export const store = createStore({
                     .catch(error => reject(error))
             });
         }
-    }
+    },
+
+    plugins: [vuexLocal.plugin]
 });

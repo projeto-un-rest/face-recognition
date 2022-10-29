@@ -63,7 +63,7 @@ export default {
 }
 
 .image-login {
-    height: 550px;
+    height: 475px;
 }
 
 .form-column {

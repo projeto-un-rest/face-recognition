@@ -4,6 +4,7 @@ import { store } from "@/store"
 import Home from "@/views/Home.vue"
 import Login from "@/views/Login.vue"
 import Register from "@/views/Register.vue"
+import Classroom from "@/views/Classroom.vue"
 
 const routes = [
     {
@@ -28,6 +29,12 @@ const routes = [
         meta: {
             public: true
         }
+    },
+
+    {
+        path: "/classroom/:code",
+        name: "Classroom",
+        component: Classroom
     }
 ]
 

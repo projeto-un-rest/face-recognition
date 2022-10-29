@@ -1,5 +1,5 @@
 <template>
-    <header class="header">
+    <header>
         <nav class="navbar navbar-background navbar-dark navbar-expand-xl">
 
             <div class="container">
@@ -51,10 +51,6 @@ export default {
 </script>
 
 <style scoped>
-.header {
-    height: 10vh;
-}
-
 .navbar-background {
     background-color: #0B2F77;
 }

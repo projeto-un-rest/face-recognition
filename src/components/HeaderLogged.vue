@@ -9,13 +9,16 @@
 
             <ul class="dropdown-menu" aria-labelledby="navbarUserOptions">
                 <li><router-link class="dropdown-item" to="/registration">Cadastro</router-link></li>
-                <li><router-link class="dropdown-item" to="/update-password">Alterar senha</router-link></li>
+                <li><a class="dropdown-item" href="#" @click.prevent="logout">Sair</a></li>
             </ul>
         </li>
     </ul>
 </template>
 
 <script>
+import { useStore } from "vuex";
+import { LOGOUT_USER } from "@/store/mutations";
+
 export default {
     name: 'HeaderLogged',
     computed: {
@@ -23,10 +26,25 @@ export default {
             return process.env.VUE_APP_API + this.user.photo_path
         }
     },
+
     props: {
         user: {
             type: Object,
             required: false
+        }
+    },
+
+    methods: {
+        logout() {
+            this.store.commit(LOGOUT_USER);
+            this.$router.push({ path: "/login" });
+        }
+    },
+
+    setup() {
+        const store = useStore();
+        return {
+            store
         }
     }
 }
