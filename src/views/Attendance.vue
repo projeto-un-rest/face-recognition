@@ -73,7 +73,7 @@ export default {
         openModal() {
             navigator.mediaDevices.getUserMedia({ video: true })
                 .then(mediaStream => {
-                    const video = this.$refs.canvas;
+                    const video = this.$refs.video;
                     video.srcObject = mediaStream;
                     video.play();
 
