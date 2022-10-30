@@ -5,7 +5,7 @@ export class Attendance extends User {
     constructor(user) {
 
         super(user);
-        this._status = "PENDENTE";
+        this._status = "PENDING";
     }
 
     set status(status) {

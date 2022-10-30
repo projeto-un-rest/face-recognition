@@ -2,7 +2,7 @@
     <div class="container">
         <div class="w-75 mt-4 mx-auto">
 
-            <div class="card shadow-sm p-2 mb-2" v-for="(attendance, index) in attendances" :key="attendance.id">
+            <div class="card shadow-sm p-2 mb-2" v-for="(attendance, index) in attendances" :key="attendance.id" :class="{ 'validated': attendance.status == 'VALIDATED', 'refused': attendance.status == 'REFUSED' }">
                 <div class="d-flex justify-content-between align-items-center p-2">
                     <h4>{{ attendance.name }}</h4>
 
@@ -123,10 +123,15 @@ export default {
 
                     if(response.data.isEqual) {
                         this.toast.success("Usuário validado com sucesso");
+                        this.attendanceSelected.attendance.status = "VALIDATED";
 
                     } else {
                         this.toast.error("Falha na autenticação do usuário");
+                        this.attendanceSelected.attendance.status = "REFUSED";
                     }
+
+                    this.attendances.splice(this.attendanceSelected.index, 1);
+                    this.attendances.push(this.attendanceSelected.attendance);
 
                 }, "image/jpeg");
 
