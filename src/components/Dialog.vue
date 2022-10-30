@@ -54,6 +54,15 @@ export default {
     animation: showModal 1s;
 }
 
+@keyframes showModal {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
 .popup-title {
     font-family: "Roboto", sans-serif;
     font-weight: 500;
@@ -68,15 +77,6 @@ export default {
 .box-icon i {
     font-size: 24px;
     color: white;
-}
-
-@keyframes showModal {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
 }
 
 .modal.active + .backdrop {

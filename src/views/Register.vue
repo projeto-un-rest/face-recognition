@@ -186,19 +186,16 @@ export default {
 }
 
 .button-dialog {
+    background-color: #0B2F77;
+    color: white;
     height: 35px;
+    border: none;
     border-radius: 5px;
 }
 
 .button-dialog::after {
     content: ">";
     margin-left: 10px;
-}
-
-.form button {
-    background-color: #0B2F77;
-    color: white;
-    border: none;
 }
 
 .video, .canvas  {

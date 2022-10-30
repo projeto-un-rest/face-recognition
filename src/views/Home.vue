@@ -65,8 +65,13 @@ export default {
 }
 
 .row .card-group > .card {
+    width: 32%;
     border: 1px solid rgba(0, 0, 0, 0.175);
     border-radius: 8px;
+}
+
+.row .card-group > .card:nth-child(2n) {
+    margin: 0px 2%;
 }
 
 .box-message {
@@ -82,5 +87,16 @@ export default {
     margin-bottom: 0;
     font-family: "Roboto", sans-serif;
     font-size: 1rem;
+}
+
+@media (max-width: 940px) {
+    .row .card-group {
+        justify-content: center;
+    }
+
+    .row .card-group > .card, .row .card-group > .card:nth-child(2n) {
+        width: auto;
+        margin: 8px;
+    }
 }
 </style>

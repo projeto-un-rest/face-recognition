@@ -27,7 +27,8 @@
 </template>
 
 <script>
-import { useStore } from "vuex"
+import { useStore } from "vuex";
+import { useToast } from "vue-toastification";
 
 export default {
     name: "Login",
@@ -44,13 +45,16 @@ export default {
         signIn() {
             this.store.dispatch("signIn", this.user)
                 .then(() => this.$router.push({ path: "/" }))
-                .catch(error => console.log(error))
+                .catch(() => this.toast.error("Usuário ou senha inválidos"))
         }
     },
     setup() {
-        const store = useStore()
+        const store = useStore();
+        const toast = useToast();
+
         return {
-            store
+            store,
+            toast
         }
     }
 }
@@ -70,7 +74,6 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-align: left;
 }
 
 .form {
@@ -80,7 +83,9 @@ export default {
 .form button {
     background-color: #0B2F77;
     color: white;
+    height: 35px;
     border: none;
+    border-radius: 5px;
 }
 
 @media (max-width: 920px) {

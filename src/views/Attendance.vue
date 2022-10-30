@@ -2,11 +2,11 @@
     <div class="container">
         <div class="w-75 mt-4 mx-auto">
 
-            <div class="card shadow p-3" v-for="attendance in attendances" :key="attendance.id" :class="{ 'is-next': attendance.isNext }">
+            <div class="card shadow-sm p-2 mb-2" v-for="(attendance, index) in attendances" :key="attendance.id">
                 <div class="d-flex justify-content-between align-items-center p-2">
                     <h4>{{ attendance.name }}</h4>
 
-                    <div class="box-icon" @click="openModal">
+                    <div class="box-icon" @click="openModal(attendance, index)">
                         <i class="fa-solid fa-camera"></i>
                     </div>
                 </div>
@@ -22,7 +22,7 @@
 
             <div class="d-flex justify-content-center mb-4">
                 <div v-if="photoAlreadyTaken">
-                    <button @click="sendForm" class="btn btn-photo">Verificar Usuário</button>
+                    <button @click="verifyUser" class="btn btn-photo">Verificar Usuário</button>
                     <button @click="clearCanvas" class="btn btn-other-photo">Tirar outra foto</button>
                 </div>
 
@@ -37,7 +37,6 @@ import http from "@/http";
 import Dialog from "@/components/Dialog.vue";
 import { Attendance } from "@/model/Attendance";
 import { useToast } from "vue-toastification";
-import { useStore } from 'vuex';
 
 export default {
     name: "Attendance",
@@ -49,7 +48,11 @@ export default {
             showModal: false,
             photoAlreadyTaken: false,
 
-            attendances: []
+            attendances: [],
+            attendanceSelected: {
+                attendance: {},
+                index: null
+            }
         }
     },
 
@@ -64,19 +67,20 @@ export default {
                         this.attendances.push(attendance);
                     }
                 });
-
-                this.attendances[0].isNext = true;
             })
             .catch(() => this.toast.error("Erro ao iniciar chamada"))
     },
 
     methods: {
-        openModal() {
+        openModal(attendance, index) {
             navigator.mediaDevices.getUserMedia({ video: true })
                 .then(mediaStream => {
                     const video = this.$refs.video;
                     video.srcObject = mediaStream;
                     video.play();
+
+                    this.attendanceSelected.attendance = attendance;
+                    this.attendanceSelected.index = index;
 
                     this.showModal = true;
                 })
@@ -100,7 +104,7 @@ export default {
             this.photoAlreadyTaken = true;
         },
 
-        sendForm() {
+        verifyUser() {
             try {
                 const canvas = this.$refs.canvas;
 
@@ -109,13 +113,20 @@ export default {
                     const formData = new FormData();
                     formData.append("photo", blob, "photo.jpg");
 
-                    const response = await http.put(`/api/user/authenticate/face/${ this.store.state.user.id }`, formData, {
+                    const response = await http.post(`/api/user/authenticate/face/${ this.attendanceSelected.attendance.id }`, formData, {
                         headers: {
                             "Content-Type": "multipart/form-data"
                         }
                     });
 
-                    console.log(response.data);
+                    this.closeModal();
+
+                    if(response.data.isEqual) {
+                        this.toast.success("Usuário validado com sucesso");
+
+                    } else {
+                        this.toast.error("Falha na autenticação do usuário");
+                    }
 
                 }, "image/jpeg");
 
@@ -133,23 +144,27 @@ export default {
 
     setup() {
         const toast = useToast();
-        const store = useStore();
-
         return {
-            toast,
-            store
+            toast
         }
     }
 }
 </script>
 
 <style scoped>
-.is-next {
-    background-color: #DFFFE2;
+.box-icon {
+    cursor: pointer;
 }
 
 .video, .canvas  {
     width: 90%;
+}
+
+.btn-photo {
+    background-color: #ce5117;
+    color: white;
+    margin-top: 16px;
+    transition: .2s ease-in-out;
 }
 
 .btn-photo:hover {
