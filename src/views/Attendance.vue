@@ -87,13 +87,15 @@ export default {
             this.attendances.forEach(attendance => {
 
                 if(attendance.status === "PENDING") {
-                    this.toast.warning("Conclua a chamada primeiro");
                     alreadyFinished = false;
                 }
             });
 
             if(alreadyFinished) {
                 this.$router.push({ name: "Classroom", params: { id: this.$route.params.classroomId } });
+
+            } else {
+                this.toast.warning("Conclua a chamada primeiro");
             }
         },
 

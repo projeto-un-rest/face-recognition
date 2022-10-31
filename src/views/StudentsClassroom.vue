@@ -182,7 +182,14 @@ export default {
                 this.closeModal();
                 this.$router.push({ name: 'Classroom', params: { classroomId: this.$route.params.classroomId } });
             
-            }).catch(() => this.toast.error("Não foi possível adicionar o estudante"))
+            }).catch((error) => {
+                if(error.response.status === 409) {
+                    this.toast.error("Estudante já cadastrado nesta turma");
+
+                } else {
+                    this.toast.error("Não foi possível adicionar o estudante");
+                }
+            })
         },
 
         clearCanvas() {

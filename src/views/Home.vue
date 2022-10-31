@@ -82,13 +82,12 @@ export default {
 }
 
 .row .card-group > .card {
-    flex: none;
     width: 32%;
     border: 1px solid rgba(0, 0, 0, 0.175);
     border-radius: 8px;
 }
 
-.row .card-group > .card:nth-child(2n) {
+.row .card-group > .card:nth-child(2n + 1) {
     margin: 0px 2%;
 }
 
