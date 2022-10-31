@@ -1,6 +1,11 @@
 import { createStore } from "vuex";
-import { SET_USER, LOGOUT_USER } from "./mutations";
+import { SET_USER, SET_ADMIN, LOGOUT_USER, LOGOUT_ADMIN } from "./mutations";
+import VuexPersistence from "vuex-persist";
 import http from "@/http";
+
+const vuexLocal = new VuexPersistence({
+    storage: window.localStorage
+});
 
 export const store = createStore({
     state: {
@@ -8,42 +13,84 @@ export const store = createStore({
             id: 0,
             name: "",
             email: "",
-            photo_path: "",
-            createdAt: "",
-            token: ""
+            createdAt: ""
         },
+
+        admin: {
+            id: 0,
+            name: "",
+            username: "",
+            createdAt: ""
+        },
+
+        token: ""
     },
 
     mutations: {
-        [SET_USER] (state, { id, name, email, photo_path, createdAt, token }) {
+        [SET_USER] (state, { id, name, email, createdAt, token }) {
             state.user.id = id,
             state.user.name = name,
             state.user.email = email,
-            state.user.photo_path = photo_path,
             state.user.createdAt = createdAt,
-            state.user.token = token
+            state.token = token
+        },
+
+        [SET_ADMIN] (state, { id, name, username, createdAt, token }) {
+            state.admin.id = id,
+            state.admin.name = name,
+            state.admin.username = username,
+            state.admin.createdAt = createdAt,
+            state.token = token
         },
 
         [LOGOUT_USER] (state) {
             state.user.id = 0,
             state.user.name = "",
             state.user.email = "",
-            state.user.photo_path = "",
             state.user.createdAt = "",
-            state.user.token = ""
+            state.token = ""
+        },
+
+        [LOGOUT_ADMIN] (state) {
+            state.admin.id = 0,
+            state.admin.name = "",
+            state.admin.username = "",
+            state.admin.createdAt = "",
+            state.token = ""
         }
     },
 
     actions: {
-        signIn({ commit }, user) {
+        userSignIn({ commit }, user) {
             return new Promise((resolve, reject) => {
                 http.post("/api/user/authenticate", user)
                     .then(response => {
+                        () => commit(LOGOUT_ADMIN)
+
                         commit(SET_USER, {
                             id: response.data.id,
                             name: response.data.name,
                             email: response.data.email,
-                            photo_path: response.data.photo_path,
+                            createdAt: response.data.createdAt,
+                            token: response.data.token
+                        });
+
+                        resolve(response)
+                    })
+                    .catch(error => reject(error))
+            });
+        },
+
+        adminSignIn({ commit }, admin) {
+            return new Promise((resolve, reject) => {
+                http.post("/api/admin/authenticate", admin)
+                    .then(response => {
+                        () => commit(LOGOUT_USER)
+
+                        commit(SET_ADMIN, {
+                            id: response.data.id,
+                            name: response.data.name,
+                            username: response.data.username,
                             createdAt: response.data.createdAt,
                             token: response.data.token
                         });
@@ -53,5 +100,7 @@ export const store = createStore({
                     .catch(error => reject(error))
             });
         }
-    }
+    },
+
+    plugins: [vuexLocal.plugin]
 });

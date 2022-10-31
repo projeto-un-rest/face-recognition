@@ -1,5 +1,5 @@
 <template>
-    <header class="header">
+    <header>
         <nav class="navbar navbar-background navbar-dark navbar-expand-xl">
 
             <div class="container">
@@ -13,9 +13,9 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
-                    <HeaderLogged v-if="userIsLogged" :user="this.store.state.user" />
-                    <HeaderNotLogged v-else />
+                <div class="collapse navbar-collapse justify-content-end" id="navbarContent" v-if="isLogged">
+                    <HeaderAdminLogged v-if="isAdmin" />
+                    <HeaderUserLogged v-else :user="this.store.state.user" />
                 </div>
             </div>
 
@@ -24,21 +24,25 @@
 </template>
 
 <script>
-import HeaderLogged from "@/components/HeaderLogged.vue"
-import HeaderNotLogged from "@/components/HeaderNotLogged.vue"
+import HeaderUserLogged from "@/components/HeaderUserLogged.vue";
+import HeaderAdminLogged from "@/components/HeaderAdminLogged.vue";
 
 import { useStore } from "vuex"
 
 export default {
     name: 'Header',
     components: {
-        HeaderLogged,
-        HeaderNotLogged
+        HeaderUserLogged,
+        HeaderAdminLogged
     },
 
     computed: {
-        userIsLogged() {
-            return Boolean(this.store.state.user.token)
+        isLogged() {
+            return Boolean(this.store.state.token)
+        },
+
+        isAdmin() {
+            return Boolean(this.store.state.admin.id)
         }
     },
     setup() {
@@ -51,10 +55,6 @@ export default {
 </script>
 
 <style scoped>
-.header {
-    height: 10vh;
-}
-
 .navbar-background {
     background-color: #0B2F77;
 }

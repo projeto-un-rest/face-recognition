@@ -18,11 +18,17 @@ export default {
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Teko&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+body {
+  position: relative;
+  padding-bottom: 4em;
+  min-height: 100vh;
 }
 </style>

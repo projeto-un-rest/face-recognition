@@ -15,8 +15,12 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 10vh;
     background-color: #0B2F77;
+    width: 100%;
+    margin-top: 20px;
+    padding: 1em;
+    position: absolute;
+    bottom: 0;
 }
 
 .footer p {
