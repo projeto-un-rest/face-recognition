@@ -5,7 +5,6 @@ export class User {
         this._name = user.name;
         this._photoPath = user.photo_path;
         this._createdAt = user.createdAt;
-        this._jobTitle = user.classroom_user.job_title;
     }
 
     get id() {
@@ -22,9 +21,5 @@ export class User {
 
     get createdAt() {
         return this._createdAt;
-    }
-
-    get jobTitle() {
-        return this._jobTitle;
     }
 }

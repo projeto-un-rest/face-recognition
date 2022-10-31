@@ -1,15 +1,24 @@
 <template>
     <div class="container">
 
+        <div class="d-flex justify-content-between align-items-center mt-4">
+            <h2>Lista de Turmas</h2>
+            <router-link class="icon" :to="{ name: 'AddClassroom' }">
+                <i class="fa-solid fa-plus"></i>
+            </router-link>
+        </div>
+
+        <hr>
+
         <div class="row">
             <div class="card-group col-12">
-                <div class="card m-2" v-for="classroom in classrooms" :key="classroom.code">
+                <div class="card m-2" v-for="classroom in classrooms" :key="classroom.id">
                     <div class="card-body">
 
                         <h3 class="card-title">{{ classroom.name }}</h3>
                         <p class="card-text">{{ classroom.description }}</p>
 
-                        <router-link class="btn btn-primary" :to="{ name: 'Classroom', params: { code: classroom.code } }">Mais Detalhes</router-link>
+                        <router-link class="btn btn-primary" :to="{ name: 'Classroom', params: { classroomId: classroom.id } }">Mais Detalhes</router-link>
 
                     </div>
                 </div>
@@ -17,7 +26,7 @@
         </div>
 
         <div class="box-message mt-4" v-if="listIsEmpty">
-            <p>Você ainda não está cadastrado em uma turma</p>
+            <p>Você ainda não criou nenhuma turma</p>
         </div>
 
     </div>
@@ -62,6 +71,14 @@ export default {
 <style scoped>
 .row {
     margin-top: 24px;
+}
+
+.icon {
+    cursor: pointer;
+}
+
+.icon i {
+    font-size: 24px;
 }
 
 .row .card-group > .card {

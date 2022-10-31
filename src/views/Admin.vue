@@ -3,20 +3,20 @@
 
         <div class="row">
             <div class="col-md-6">
-                <img class="image-login" src="@/assets/login.svg">
+                <img class="image-admin" src="@/assets/admin.svg" alt="Imagem Ilustrativa de Administrador">
             </div>
 
             <div class="col-md-6 form-column">
-                <h2 class="mb-4">Bem-vindo de volta</h2>
+                <h2 class="mb-4">Olá Administrador</h2>
 
                 <form class="form" @submit.prevent="signIn" novalidate>
-                    <label for="email">E-mail</label>
-                    <input class="form-control" id="email" type="email" v-model="user.email">
-
+                    <label for="username">Nome de Usuário</label>
+                    <input class="form-control" id="username" type="text" v-model="admin.username">
+                
                     <label for="password">Senha</label>
-                    <input class="form-control" id="password" type="password" v-model="user.password">
-
-                    <div class="d-grid mt-3">
+                    <input class="form-control" id="password" type="password" v-model="admin.password">
+                
+                    <div class="d-grid my-3">
                         <button class="btn btn-primary">Entrar</button>
                     </div>
                 </form>
@@ -27,15 +27,17 @@
 </template>
 
 <script>
+import useValidate from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
 import { useStore } from "vuex";
 import { useToast } from "vue-toastification";
 
 export default {
-    name: "Login",
+    name: "Register",
     data() {
         return {
-            user: {
-                email: "",
+            admin: {
+                username: "",
                 password: ""
             }
         }
@@ -43,16 +45,32 @@ export default {
 
     methods: {
         signIn() {
-            this.store.dispatch("userSignIn", this.user)
-                .then(() => this.$router.push({ path: "/" }))
-                .catch(() => this.toast.error("Usuário ou senha inválidos"))
+            this.v$.$validate();
+
+            if(!this.v$.$error) {
+                this.store.dispatch("adminSignIn", this.admin)
+                    .then(() => this.$router.push({ name: "AddStudent" }))
+                    .catch(() => this.toast.error("Usuário ou senha inválidos"))
+            }
         }
     },
+
+    validations() {
+        return {
+            admin: {
+                username: { required },
+                password: { required }
+            }
+        }
+    },
+
     setup() {
+        const v$ = useValidate();
         const store = useStore();
         const toast = useToast();
 
         return {
+            v$,
             store,
             toast
         }
@@ -65,8 +83,8 @@ export default {
     align-items: center;
 }
 
-.image-login {
-    height: 475px;
+.image-admin {
+    height: 450px;
 }
 
 .form-column {
@@ -88,7 +106,7 @@ export default {
 }
 
 @media (max-width: 920px) {
-    .image-login {
+    .image-admin {
         display: none;
     }
 

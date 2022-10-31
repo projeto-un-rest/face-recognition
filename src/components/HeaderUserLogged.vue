@@ -4,7 +4,7 @@
 
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarUserOptions" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <img class="navbar-user-photo" :src="userPhoto" alt="Foto de Perfil">
+                {{ this.store.state.user.name }}
             </a>
 
             <ul class="dropdown-menu" aria-labelledby="navbarUserOptions">
@@ -20,13 +20,7 @@ import { useStore } from "vuex";
 import { LOGOUT_USER } from "@/store/mutations";
 
 export default {
-    name: 'HeaderLogged',
-    computed: {
-        userPhoto() {
-            return process.env.VUE_APP_API + this.user.photo_path
-        }
-    },
-
+    name: 'HeaderUserLogged',
     props: {
         user: {
             type: Object,

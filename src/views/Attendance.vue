@@ -26,13 +26,13 @@
                 <canvas class="canvas position-absolute" ref="canvas"></canvas>
             </div>
 
-            <div class="d-flex justify-content-center mb-4">
+            <div class="d-flex justify-content-center my-4">
                 <div v-if="photoAlreadyTaken">
-                    <button @click="verifyUser" class="btn btn-photo">Verificar Usuário</button>
-                    <button @click="clearCanvas" class="btn btn-other-photo">Tirar outra foto</button>
+                    <button @click="verifyUser" class="btn btn-primary me-2">Verificar Usuário</button>
+                    <button @click="clearCanvas" class="btn btn-secondary">Tirar outra foto</button>
                 </div>
 
-                <button v-else @click="takePhoto" class="btn btn-photo">Tirar foto</button>
+                <button v-else @click="takePhoto" class="btn btn-primary">Tirar foto</button>
             </div>
         </Dialog>
     </div>
@@ -70,15 +70,11 @@ export default {
     },
 
     mounted() {
-        http.get(`/api/classroom/${ this.$route.params.classroomCode }`)
+        http.get(`/api/classroom/student/${ this.$route.params.classroomId }`)
             .then(response => {
-
-                response.data.users.forEach(user => {
-
-                    if(user.classroom_user.job_title == "ALUNO") {
-                        const attendance = new Attendance(user);
-                        this.attendances.push(attendance);
-                    }
+                response.data.students.forEach(student => {
+                    const attendance = new Attendance(student);
+                    this.attendances.push(attendance);
                 });
             })
             .catch(() => this.toast.error("Erro ao iniciar chamada"))
@@ -98,12 +94,14 @@ export default {
             });
 
             if(alreadyFinished) {
-                this.$router.push({ name: "Classroom", params: { code: this.$route.params.classroomCode } });
+                this.$router.push({ name: "Classroom", params: { id: this.$route.params.classroomId } });
             }
         },
 
         openModal(attendance, index) {
-            navigator.mediaDevices.getUserMedia({ video: true })
+            if(attendance.status == "PENDING") {
+
+                navigator.mediaDevices.getUserMedia({ video: true })
                 .then(mediaStream => {
                     const video = this.$refs.video;
                     video.srcObject = mediaStream;
@@ -115,6 +113,7 @@ export default {
                     this.showModal = true;
                 })
                 .catch(() => this.toast.error("Não foi possível acessar a câmera"))
+            }
         },
 
         closeModal() {
@@ -143,7 +142,7 @@ export default {
                     const formData = new FormData();
                     formData.append("photo", blob, "photo.jpg");
 
-                    const response = await http.post(`/api/user/authenticate/face/${ this.attendanceSelected.attendance.id }`, formData, {
+                    const response = await http.post(`/api/student/authenticate/face/${ this.attendanceSelected.attendance.id }`, formData, {
                         headers: {
                             "Content-Type": "multipart/form-data"
                         }
@@ -220,26 +219,16 @@ export default {
     width: 90%;
 }
 
-.btn-photo {
-    background-color: #ce5117;
-    color: white;
+.box-buttons {
     margin-top: 16px;
-    transition: .2s ease-in-out;
 }
 
-.btn-photo:hover {
-    background-color: #c04308;
+.button-popup {
+    width: 150px;
+    height: 40px;
+    background-color: #CE5117;
     color: white;
-}
-
-.btn-other-photo {
-    background-color: grey;
-    color: white;
-    margin: 16px 0px 0px 16px;
-}
-
-.btn-other-photo:hover {
-    background-color: grey;
-    color: white;
+    border: none;
+    border-radius: 5px;
 }
 </style>

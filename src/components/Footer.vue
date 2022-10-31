@@ -17,7 +17,8 @@ export default {
     align-items: center;
     background-color: #0B2F77;
     width: 100%;
-    padding: 1.2em;
+    margin-top: 20px;
+    padding: 1em;
     position: absolute;
     bottom: 0;
 }

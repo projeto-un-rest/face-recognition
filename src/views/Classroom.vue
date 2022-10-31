@@ -3,32 +3,28 @@
         <div class="w-75 mt-4 mx-auto">
 
             <div class="card shadow-sm p-4">
-                <h2>{{ classroom.data.name }}</h2>
-                <p>{{ classroom.data.description }}</p>
-                <p>Código de Acesso: {{ classroom.data.code }}</p>
-                <router-link class="btn btn-primary mt-3" v-if="classroom.data.code" :to="{ name: 'Attendance', params: { classroomCode: classroom.data.code } }">
+                <h2>{{ classroom.name }}</h2>
+                <p>{{ classroom.description }}</p>
+                <p>Turma criada no dia: {{ formatDate(classroom.createdAt) }}</p>
+                <router-link class="btn btn-primary mt-3" v-if="classroom.id" :to="{ name: 'Attendance', params: { classroomId: classroom.id } }">
                     Iniciar Chamada
                 </router-link>
             </div>
 
             <div class="mt-5">
-                <h3>Professores</h3>
-                <hr>
-
-                <div class="card shadow p-3" v-for="teacher in classroom.teachers" :key="teacher.id">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h4 class="card-title">{{ teacher.name }}</h4>
-                        <p class="mb-0">{{ formatDate(teacher.createdAt) }}</p>
-                    </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h3>Alunos</h3>
+                    <router-link class="icon" :to="{ name: 'StudentsClassroom', params: { classroomid: classroom.id } }">
+                        <i class="fa-solid fa-plus"></i>
+                    </router-link>
                 </div>
 
-                <h3>Alunos</h3>
-                <hr>
+                <hr>                
 
-                <div class="card shadow p-3" v-for="student in classroom.students" :key="student.id">
+                <div class="card shadow-sm p-3 mb-3" v-for="student in classroom.students" :key="student.id">
                     <div class="d-flex justify-content-between align-items-center">
                         <h4>{{ student.name }}</h4>
-                        <p class="mb-0">{{ formatDate(student.createdAt) }}</p>
+                        <p class="mb-0">{{ student.registration }}</p>
                     </div>
                 </div>
             </div>
@@ -45,15 +41,12 @@ export default {
     data() {
         return {
             classroom: {
-                teachers: [],
-                students: [],
+                id: 0,
+                name: "",
+                description: "",
+                createdAt: "",
 
-                data: {
-                    code: "",
-                    name: "",
-                    description: "",
-                    createdAt: ""
-                }
+                students: []
             },
         }
     },
@@ -65,24 +58,16 @@ export default {
     },
 
     mounted() {
-        http.get(`/api/classroom/${ this.$route.params.code }`)
+        http.get(`/api/classroom/student/${ this.$route.params.classroomId }`)
             .then(response => {
                 const data = response.data;
 
-                data.users.forEach(user => {
-                    if(user.classroom_user.job_title == "PROFESSOR") {
-                        this.classroom.teachers.push(user)
+                this.classroom.id = data.id;
+                this.classroom.name = data.name;
+                this.classroom.description = data.description;
+                this.classroom.createdAt = data.createdAt;
 
-                    } else {
-                        this.classroom.students.push(user)
-                    }
-                });
-
-                this.classroom.data.code = data.code;
-                this.classroom.data.name = data.name;
-                this.classroom.data.description = data.description;
-                this.classroom.data.createdAt = data.createdAt;
-
+                this.classroom.students = data.students;
             })
             .catch(() => this.toast.error("Erro ao carregar a turma"))
     },
@@ -118,7 +103,11 @@ export default {
     font-weight: 500;
 }
 
-.container hr {
-    color: #0B2F77;
+.icon {
+    cursor: pointer;
+}
+
+.icon i {
+    font-size: 20px;
 }
 </style>

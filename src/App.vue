@@ -25,4 +25,10 @@ export default {
   padding: 0;
   box-sizing: border-box;
 }
+
+body {
+  position: relative;
+  padding-bottom: 4em;
+  min-height: 100vh;
+}
 </style>
