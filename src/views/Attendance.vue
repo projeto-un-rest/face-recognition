@@ -64,8 +64,8 @@ export default {
 
     computed: {
         todayDate() {
-            const date = new Date();
-            return this.addZero(date.getDate()) + "/" + this.addZero(date.getMonth()) + "/" + date.getFullYear();
+            const date = new Date().toISOString();
+            return date.substring(0, 10).split("-").reverse().join("/");
         }
     },
 
@@ -82,7 +82,6 @@ export default {
 
     methods: {
         finishAttendance() {
-
             let alreadyFinished = true;
 
             this.attendances.forEach(attendance => {
@@ -99,20 +98,22 @@ export default {
         },
 
         openModal(attendance, index) {
-            if(attendance.status == "PENDING") {
+            if(attendance.status != "PENDING") {
+                this.toast.warning("Você já fez a chamada deste estudante");
 
+            } else {
                 navigator.mediaDevices.getUserMedia({ video: true })
-                .then(mediaStream => {
-                    const video = this.$refs.video;
-                    video.srcObject = mediaStream;
-                    video.play();
+                    .then(mediaStream => {
+                        const video = this.$refs.video;
+                        video.srcObject = mediaStream;
+                        video.play();
 
-                    this.attendanceSelected.attendance = attendance;
-                    this.attendanceSelected.index = index;
+                        this.attendanceSelected.attendance = attendance;
+                        this.attendanceSelected.index = index;
 
-                    this.showModal = true;
-                })
-                .catch(() => this.toast.error("Não foi possível acessar a câmera"))
+                        this.showModal = true;
+                    })
+                    .catch(() => this.toast.error("Não foi possível acessar a câmera"))
             }
         },
 
@@ -217,18 +218,5 @@ export default {
 
 .video, .canvas  {
     width: 90%;
-}
-
-.box-buttons {
-    margin-top: 16px;
-}
-
-.button-popup {
-    width: 150px;
-    height: 40px;
-    background-color: #CE5117;
-    color: white;
-    border: none;
-    border-radius: 5px;
 }
 </style>

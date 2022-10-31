@@ -93,8 +93,13 @@ export default {
     }
 
     .form-column {
-        height: 100%;
-        justify-content: center;
+        margin-top: 20%;
+    }
+}
+
+@media (min-width: 1380px) {
+    .row {
+        height: 80vh;
     }
 }
 </style>

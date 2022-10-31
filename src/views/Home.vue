@@ -82,6 +82,7 @@ export default {
 }
 
 .row .card-group > .card {
+    flex: none;
     width: 32%;
     border: 1px solid rgba(0, 0, 0, 0.175);
     border-radius: 8px;

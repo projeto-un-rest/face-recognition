@@ -83,10 +83,10 @@ export const store = createStore({
 
         adminSignIn({ commit }, admin) {
             return new Promise((resolve, reject) => {
-                () => commit(LOGOUT_USER)
-
                 http.post("/api/admin/authenticate", admin)
                     .then(response => {
+                        () => commit(LOGOUT_USER)
+
                         commit(SET_ADMIN, {
                             id: response.data.id,
                             name: response.data.name,

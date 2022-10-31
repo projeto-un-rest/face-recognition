@@ -11,21 +11,19 @@
                 </router-link>
             </div>
 
-            <div class="mt-5">
+            <div class="d-flex justify-content-between align-items-center mt-5">
+                <h3>Alunos</h3>
+                <router-link class="icon" :to="{ name: 'StudentsClassroom', params: { classroomId: classroom.id } }">
+                    <i class="fa-solid fa-plus"></i>
+                </router-link>
+            </div>
+
+            <hr>                
+
+            <div class="card shadow-sm p-3 mb-3" v-for="student in classroom.students" :key="student.id">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h3>Alunos</h3>
-                    <router-link class="icon" :to="{ name: 'StudentsClassroom', params: { classroomid: classroom.id } }">
-                        <i class="fa-solid fa-plus"></i>
-                    </router-link>
-                </div>
-
-                <hr>                
-
-                <div class="card shadow-sm p-3 mb-3" v-for="student in classroom.students" :key="student.id">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h4>{{ student.name }}</h4>
-                        <p class="mb-0">{{ student.registration }}</p>
-                    </div>
+                    <h4>{{ student.name }}</h4>
+                    <p class="mb-0">{{ student.registration }}</p>
                 </div>
             </div>
         </div>

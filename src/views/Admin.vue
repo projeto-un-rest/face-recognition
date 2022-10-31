@@ -33,7 +33,7 @@ import { useStore } from "vuex";
 import { useToast } from "vue-toastification";
 
 export default {
-    name: "Register",
+    name: "Admin",
     data() {
         return {
             admin: {
@@ -51,7 +51,8 @@ export default {
                 this.store.dispatch("adminSignIn", this.admin)
                     .then(() => this.$router.push({ name: "AddStudent" }))
                     .catch(() => this.toast.error("Usuário ou senha inválidos"))
-            }
+            
+            } else { this.toast.error("Preencha todos os campos") }
         }
     },
 
@@ -84,7 +85,7 @@ export default {
 }
 
 .image-admin {
-    height: 450px;
+    height: 475px;
 }
 
 .form-column {
@@ -111,8 +112,13 @@ export default {
     }
 
     .form-column {
-        height: 100%;
-        justify-content: center;
+        margin-top: 20%;
+    }
+}
+
+@media (min-width: 1380px) {
+    .row {
+        height: 80vh;
     }
 }
 </style>

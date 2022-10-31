@@ -4,12 +4,12 @@
 
             <h2>Criar uma nova turma</h2>
 
-            <form class="mt-4" @submit.prevent="registerClassroom">
+            <form class="form mt-4" @submit.prevent="registerClassroom">
                 <label for="name">Nome da Turma</label>
-                <input class="form-control mb-4" type="text" id="name" v-model="classroom.name">
+                <input class="form-control mb-3" type="text" id="name" v-model="classroom.name">
 
                 <label for="description">Descrição</label>
-                <textarea class="form-control mb-2" type="text" name="description" v-model="classroom.description"></textarea>
+                <textarea class="form-control mb-3" type="text" name="description" v-model="classroom.description"></textarea>
 
                 <button class="btn btn-primary">Cadastrar</button>
             </form>
@@ -48,7 +48,7 @@ export default {
             if(!this.v$.$error) {
                 http.post("/api/classroom", this.classroom)
                     .then(() => {
-                        this.toast.success("Turma criada com sucesos");
+                        this.toast.success("Turma criada com sucesso");
                         this.clearForm();
                     })
                     .catch(() => this.toast.error("Erro ao criar turma"))
@@ -91,6 +91,10 @@ export default {
 .content {
     width: 50%;
     margin-top: 40px;
+}
+
+.content .form > textarea {
+    height: 100px;
 }
 
 @media (max-width: 940px) {

@@ -1,9 +1,9 @@
 <template>
     <div class="container">
 
-        <h2 class="container-title mt-4">Adicionar Estudante</h2>
+        <h2 class="container-title mt-5">Adicionar Estudante</h2>
 
-        <div class="container-form mt-3">
+        <div class="container-form mt-4">
             <form class="form" @submit.prevent="addStudent" novalidate>
                 <label for="name">Nome do Aluno</label>
                 <input class="form-control" type="text" id="name" v-model="student.name">
@@ -15,15 +15,21 @@
             </form>
         </div>
 
-        <div class="mt-5">
-            <h3>Lista de Estudantes</h3>
-            <hr>
+        <h3 class="container-title mt-5">Lista de Estudantes</h3>
+        <hr>
 
-            <div class="card shadow-sm p-3 mb-3" v-for="student in students" :key="student.id">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h4>{{ student.name }}</h4>
-                    <p class="mb-0">{{ student.registration }}</p>
+        <div class="card shadow-sm p-3 mb-3" v-for="student in students" :key="student.id">
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+                    <h4 class="card-title">{{ student.name }}</h4>
+                    <p class="card-subtitle">{{ student.registration }}</p>
                 </div>
+
+                <div class="box-icon" @click="deleteStudent(student.id)">
+                    <i class="fa-solid fa-trash"></i>
+                </div>
+
             </div>
         </div>
         
@@ -77,6 +83,15 @@ export default {
             }
         },
 
+        deleteStudent(id) {
+            http.delete(`/api/student/${ id }`)
+                .then(() => {
+                    this.toast.success("Estudante excluído com sucesso");
+                    this.loadStudents();
+                })
+                .catch(() => this.toast.error("Erro ao excluir estudante"))
+        },
+
         clearForm() {
             this.student.name = "";
             this.student.registration = "";
@@ -105,9 +120,30 @@ export default {
 </script>
 
 <style scoped>
-h2.container-title {
+.container-title {
     font-family: "Roboto", sans-serif;
     font-weight: 500;
     font-size: 28px;
+}
+
+.container-form input {
+    width: 400px;
+}
+
+h4 {
+    font-weight: 500;
+}
+
+h5 {
+    font-weight: 400;
+}
+
+.box-icon {
+    cursor: pointer;
+}
+
+.box-icon i {
+    font-size: 20px;
+    color: red;
 }
 </style>

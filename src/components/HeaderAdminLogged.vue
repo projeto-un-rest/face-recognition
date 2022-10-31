@@ -1,8 +1,17 @@
 <template>
     <ul class="navbar-nav">
-        <li class="nav-item"><router-link class="nav-link" to="/">Usuários</router-link></li>
-        <li class="nav-item"><router-link class="nav-link" to="/">Estudantes</router-link></li>
-        <li class="nav-item"><a class="nav-link" href="#" @click.prevent="logout">Sair</a></li>
+        <li class="nav-item"><router-link class="nav-link" :to="{ name: 'AddStudent' }">Estudantes</router-link></li>
+        <li class="nav-item"><router-link class="nav-link" :to="{ name: 'AddUser' }">Usuários</router-link></li>
+
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarAdminOptions" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                {{ this.store.state.admin.name }}
+            </a>
+
+            <ul class="dropdown-menu" aria-labelledby="navbarAdminOptions">
+                <li><a class="dropdown-item" href="#" @click.prevent="logout">Sair</a></li>
+            </ul>
+        </li>
     </ul>
 </template>
 
@@ -15,7 +24,7 @@ export default {
     methods: {
         logout() {
             this.store.commit(LOGOUT_ADMIN);
-            this.$router.push({ path: "/admin" });
+            this.$router.push({ name: "Admin" });
         }
     },
 

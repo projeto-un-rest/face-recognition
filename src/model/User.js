@@ -3,6 +3,7 @@ export class User {
     constructor(user) {
         this._id = user.id;
         this._name = user.name;
+        this._registration = user.registration;
         this._photoPath = user.photo_path;
         this._createdAt = user.createdAt;
     }
@@ -13,6 +14,10 @@ export class User {
 
     get name() {
         return this._name;
+    }
+
+    get registration() {
+        return this._registration;
     }
 
     get photoPath() {

@@ -12,15 +12,13 @@
             </form>
         </div>
 
-        <div class="mt-5">
-            <h3 class="container-title">Lista de Alunos</h3>
-            <hr>
+        <h3 class="container-title mt-5">Lista de Alunos</h3>
+        <hr>
 
-            <div class="card shadow-sm p-3 mb-3" v-for="student in classroom.students" :key="student.id">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h4>{{ student.name }}</h4>
-                    <p class="mb-0">{{ student.registration }}</p>
-                </div>
+        <div class="card shadow-sm p-3 mb-3" v-for="student in classroom.students" :key="student.id">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4>{{ student.name }}</h4>
+                <p class="mb-0">{{ student.registration }}</p>
             </div>
         </div>
 
@@ -30,7 +28,7 @@
                 <canvas class="canvas position-absolute" ref="canvas"></canvas>
             </div>
 
-            <div class="d-flex justify-content-center mb-4">
+            <div class="d-flex justify-content-center my-4">
                 <div v-if="photoAlreadyTaken">
                     <button @click="addPhoto" class="btn btn-primary me-2">Cadastrar Foto</button>
                     <button @click="clearCanvas" class="btn btn-secondary">Tirar outra foto</button>
@@ -98,11 +96,13 @@ export default {
         findStudent() {
             http.get(`/api/student/confirm/${ this.student.registration }`)
                 .then(response => {
-                    this.student.id = response.data.id;
-                    this.student.name = response.data.name;
-                    this.student.registration = response.data.registration;
-                    this.student.photoPath = response.data.photo_path;
-                    this.student.createdAt = response.data.createdAt
+                    const data = response.data;
+
+                    this.student.id = data.id;
+                    this.student.name = data.name;
+                    this.student.registration = data.registration;
+                    this.student.photoPath = data.photo_path;
+                    this.student.createdAt = data.createdAt
 
                     if(this.student.photoPath === null) {
                         this.openModal();
@@ -240,7 +240,7 @@ h3.container-title {
     }
 
     h3.container-title {
-        font-size: 18px;
+        font-size: 20px;
     }
 
     .container-form {
